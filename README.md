@@ -4,5 +4,7 @@
 
 ### Features
   * Send mails (done)
-  * Data Validation (not yet)
-  * Adding default values for list of choices (not yet)
+  * Data Validation (done)
+  * Adding default values for list of choices (done)
+  * OneToMany (done)
+  * Fetching OneToMany from both parts of the relationship (not yet)
