@@ -7,6 +7,7 @@ import com.meetpe_api.meetpe_api.DTO.Responses.RegisterResponse;
 import com.meetpe_api.meetpe_api.Entities.User;
 import com.meetpe_api.meetpe_api.Services.JwtService;
 import com.meetpe_api.meetpe_api.configs.AuthenticationService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
     @PostMapping("/signup")
-    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
         RegisterResponse registerResponse = new RegisterResponse();
 
         User registeredUser = authenticationService.signup(registerUserDto);
@@ -39,7 +40,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
+    public ResponseEntity<LoginResponse> authenticate(@Valid @RequestBody LoginUserDto loginUserDto) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
 
         String jwtToken = jwtService.generateToken(authenticatedUser);
