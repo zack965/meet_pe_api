@@ -43,6 +43,16 @@ public class User implements UserDetails {
     private Date updatedAt;
 
 
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "notification_id", referencedColumnName = "id")
+//    private NotificationSetting notificationSetting;
+//    @OneToOne(mappedBy = "notificationSetting")
+//    private User user;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "notification_id", referencedColumnName = "id")
+//    private NotificationSetting notificationSetting;
+    @OneToOne(mappedBy = "user")
+    private NotificationSetting notificationSetting;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();

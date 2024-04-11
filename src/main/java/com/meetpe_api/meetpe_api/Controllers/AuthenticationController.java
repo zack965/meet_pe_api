@@ -6,6 +6,7 @@ import com.meetpe_api.meetpe_api.DTO.Responses.LoginResponse;
 import com.meetpe_api.meetpe_api.DTO.Responses.RegisterResponse;
 import com.meetpe_api.meetpe_api.Entities.User;
 import com.meetpe_api.meetpe_api.Services.JwtService;
+import com.meetpe_api.meetpe_api.Services.UserService;
 import com.meetpe_api.meetpe_api.configs.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -22,10 +23,12 @@ public class AuthenticationController {
     private final JwtService jwtService;
 
     private final AuthenticationService authenticationService;
+    private UserService userService;
 
-    public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService) {
+    public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService,UserService userService) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
+        this.userService = userService;
     }
     @PostMapping("/signup")
     @Operation(security = {@SecurityRequirement(name = "API-KEY") })
@@ -33,7 +36,7 @@ public class AuthenticationController {
         RegisterResponse registerResponse = new RegisterResponse();
 
         User registeredUser = authenticationService.signup(registerUserDto);
-
+        this.userService.InitAccount(registeredUser);
         String jwtToken = jwtService.generateToken(registeredUser);
         registerResponse.setUser(registeredUser);
         registerResponse.setToken(jwtToken);
