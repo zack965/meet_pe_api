@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface QuestionRepository  extends JpaRepository<Question,Long> {
     Optional<Question> findByQuestionText(String QuestionText);
+    Optional<Question> findByQuestionKey(String QuestionKey);
 }
+    

@@ -16,6 +16,9 @@ public class QuestionService {
     public QuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
+    public Optional<Question> GetQuestionByKey(String questionKey) {
+        return this.questionRepository.findByQuestionKey(questionKey);
+    }
 
     @PostConstruct
     public void init() {

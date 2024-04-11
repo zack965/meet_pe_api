@@ -7,6 +7,8 @@ import com.meetpe_api.meetpe_api.DTO.Responses.RegisterResponse;
 import com.meetpe_api.meetpe_api.Entities.User;
 import com.meetpe_api.meetpe_api.Services.JwtService;
 import com.meetpe_api.meetpe_api.configs.AuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/auth")
+@RequestMapping("/app/auth")
 @RestController
 public class AuthenticationController {
     private final JwtService jwtService;
@@ -26,6 +28,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
     @PostMapping("/signup")
+    @Operation(security = {@SecurityRequirement(name = "API-KEY") })
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
         RegisterResponse registerResponse = new RegisterResponse();
 
@@ -40,6 +43,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
+    @Operation(security = {@SecurityRequirement(name = "API-KEY") })
     public ResponseEntity<LoginResponse> authenticate(@Valid @RequestBody LoginUserDto loginUserDto) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
 

@@ -7,7 +7,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpMethod;
 import org.springframework.lang.NonNull;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,7 +21,8 @@ import java.io.IOException;
 public class ApiKeyFilter extends OncePerRequestFilter {
 
     private ApiKeyConfig apiKeyConfig;
-
+    private final RequestMatcher uriMatcher =
+            new AntPathRequestMatcher("/api/some/url", HttpMethod.GET.name());
     public ApiKeyFilter(ApiKeyConfig apiKeyConfig) {
         this.apiKeyConfig = apiKeyConfig;
     }
@@ -29,9 +34,21 @@ public class ApiKeyFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        String apiKey = request.getHeader("API-KEY");
-        if (apiKey != null && apiKey.equals(apiKeyConfig.getApiKey())) {
+        String path = request.getServletPath();
+        if(!path.startsWith("/app")) {
             filterChain.doFilter(request, response);
+            return;
+        }
+        System.out.println(path);
+        String apiKey = request.getHeader("API-KEY");
+
+        if (apiKey != null && apiKey.equals(apiKeyConfig.getApiKey())) {
+            System.out.println(apiKey);
+            System.out.println(apiKeyConfig.getApiKey());
+
+            filterChain.doFilter(request, response);
+            return;
+
         } else {
             System.out.println("from filter ");
 
@@ -42,4 +59,5 @@ public class ApiKeyFilter extends OncePerRequestFilter {
             response.getWriter().write(errorJson);
         }
     }
+
 }
