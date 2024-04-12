@@ -5,6 +5,7 @@ import com.meetpe_api.meetpe_api.DTO.Responses.NotificationSetting.GetUserNotifi
 import com.meetpe_api.meetpe_api.Entities.NotificationSetting;
 import com.meetpe_api.meetpe_api.Entities.User;
 import com.meetpe_api.meetpe_api.Services.NotificationSettingService;
+import com.meetpe_api.meetpe_api.wrappers.NotificationSettingWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
@@ -20,35 +21,31 @@ import java.util.Optional;
 @RequestMapping("/app")
 public class NotificationSettingController {
     private NotificationSettingService notificationSettingService;
-    public NotificationSettingController(NotificationSettingService notificationSettingService) {
+    private NotificationSettingWrapper notificationSettingWrapper;
+
+    public NotificationSettingController(NotificationSettingService notificationSettingService, NotificationSettingWrapper notificationSettingWrapper) {
         this.notificationSettingService = notificationSettingService;
+        this.notificationSettingWrapper = notificationSettingWrapper;
     }
+
     @GetMapping("/user_notification")
     @Operation(security = { @SecurityRequirement(name = "bearer-key"),@SecurityRequirement(name = "API-KEY") })
     public ResponseEntity<GetUserNotificationResponse> getUserNotification() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
-        Optional<NotificationSetting>  notificationSetting = this.notificationSettingService.GetNotificationOfUser(currentUser);
-        if(notificationSetting.isPresent()){
+        Optional<NotificationSetting>  notificationSettingOptional = this.notificationSettingService.GetNotificationOfUser(currentUser);
+        if(notificationSettingOptional.isPresent()){
+            NotificationSetting notificationSetting = notificationSettingOptional.get();
             UserEntityDto userEntityDto = new UserEntityDto();
-            GetUserNotificationResponse getUserNotificationResponse = new GetUserNotificationResponse();
             userEntityDto.setEmail(currentUser.getEmail());
             userEntityDto.setFullname(currentUser.getFullName());
-            getUserNotificationResponse.setUser(userEntityDto);
 
-            getUserNotificationResponse.setNotificationAppPush(notificationSetting.get().isNotificationAppPush());
-            getUserNotificationResponse.setNotificationAppSms(notificationSetting.get().isNotificationAppSms());
-            getUserNotificationResponse.setNotificationAppEmail(notificationSetting.get().isNotificationAppEmail());
+             GetUserNotificationResponse getUserNotificationResponse = this.notificationSettingWrapper.getUserNotification(userEntityDto,notificationSetting);
 
-
-            getUserNotificationResponse.setNotificationReservationEmail(notificationSetting.get().isNotificationReservationEmail());
-            getUserNotificationResponse.setNotificationReservationSms(notificationSetting.get().isNotificationReservationSms());
-            getUserNotificationResponse.setNotificationReservationAppPush(notificationSetting.get().isNotificationReservationAppPush());
 
 
             return ResponseEntity.ok(getUserNotificationResponse);
         }
         return ResponseEntity.notFound().build();
-       // return notificationSetting.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

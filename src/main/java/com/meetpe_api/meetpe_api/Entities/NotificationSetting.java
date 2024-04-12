@@ -25,11 +25,7 @@ public class NotificationSetting {
     private boolean notificationReservationAppPush;
     private boolean notificationReservationSms;
 
-//    @OneToOne(mappedBy = "notificationSetting")
-//    private User user;
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "notification_id", referencedColumnName = "id")
-//    private NotificationSetting notificationSetting;
+
     @OneToOne()
     @JoinColumn(name = "user_id")
     @JsonIgnore
