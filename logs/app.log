@@ -1,1 +1,15 @@
 2024-04-12 20:17:54,773 ERROR c.m.m.C.LogingController [http-nio-8005-exec-6] FATAL ERROR
+2024-04-13 19:57:52,040 ERROR o.s.b.d.LoggingFailureAnalysisReporter [restartedMain] 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8005 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8005 or configure this application to listen on another port.
+

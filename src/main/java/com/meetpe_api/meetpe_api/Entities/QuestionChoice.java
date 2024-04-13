@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 
@@ -33,6 +34,10 @@ public class QuestionChoice {
     @JoinColumn(name = "question_id")
     @JsonBackReference
     private Question question;
+
+    @OneToMany(mappedBy="questionChoice")
+    private List<Response> responses;
+
 
 
     public Long getId() {

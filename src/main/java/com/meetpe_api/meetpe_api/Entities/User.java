@@ -42,15 +42,9 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @OneToMany(mappedBy="user")
+    private List<Response> responses;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "notification_id", referencedColumnName = "id")
-//    private NotificationSetting notificationSetting;
-//    @OneToOne(mappedBy = "notificationSetting")
-//    private User user;
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "notification_id", referencedColumnName = "id")
-//    private NotificationSetting notificationSetting;
     @OneToOne(mappedBy = "user")
     private NotificationSetting notificationSetting;
     @Override
