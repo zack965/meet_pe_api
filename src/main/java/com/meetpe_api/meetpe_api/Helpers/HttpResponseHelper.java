@@ -8,9 +8,6 @@ public class HttpResponseHelper {
     public static HashMap<String, String> getGlobalCreatedResponse(String key,String value) {
         HashMap<String, String> message = new HashMap<>();
         message.put(key,value);
-
-//        GlobalCreatedResponse globalCreatedResponse = new GlobalCreatedResponse();
-//        globalCreatedResponse.setMessage(message);
         return message;
     }
 }
